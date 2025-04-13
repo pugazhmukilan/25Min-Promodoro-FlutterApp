@@ -166,7 +166,7 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       IconButton(onPressed: (){}, icon: Icon(Icons.add),iconSize: 50,),
                       Text("Add/View\nTask",textAlign: TextAlign.center ,style:TextStyle(fontFamily: "Montserrat",fontWeight: FontWeight.w700,
-                                                                                fontSize: 16,color:isDarkTheme? AppColors.white1: AppColors.blackLight)),
+                                                                                  fontSize: 16,color:isDarkTheme? AppColors.white1: AppColors.blackLight)),
                     ],
                   ),
                 ),
@@ -195,10 +195,6 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
 
-
-
-                
-                
               ],
             ),
           ),

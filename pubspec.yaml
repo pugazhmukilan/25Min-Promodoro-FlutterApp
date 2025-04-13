@@ -17,6 +17,8 @@ dependencies:
   flutter_bloc:
   shared_preferences: ^2.5.3
   fl_chart: ^0.70.2
+  number_selector: ^1.0.7
+  numberpicker: ^2.1.2
 
 
 dev_dependencies:
