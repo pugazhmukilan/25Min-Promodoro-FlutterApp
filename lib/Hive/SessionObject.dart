@@ -1,52 +1,51 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:uuid/uuid.dart';
-import 'TaskObject.dart'; // Import the Task class
 
 
-@HiveType(typeId: 1)
-class Session extends HiveObject {
+part "SessionObject.g.dart";
+
+@HiveType(typeId: 0)
+class PomodoroSession extends HiveObject {
   @HiveField(0)
-  late String sessionId; // Will be initialized in constructor
+  late String sessionId;
 
   @HiveField(1)
-  String sessionName;
+  late List<String> taskIds; // IDs from tasksBox
 
   @HiveField(2)
-  int sprints;
+  late int totalSprints;
 
   @HiveField(3)
-  int completedTaskCount;
+  late int completedSprints;
 
   @HiveField(4)
-  int totalTaskCount;
+  late DateTime startTime;
 
   @HiveField(5)
-  double efficiency;
+  late Duration sessionDuration;
 
   @HiveField(6)
-  DateTime date;
+  late bool isCompleted;
 
   @HiveField(7)
-  List<Task> taskList;
+  late int efficiency;
 
-  Session({
-    this.sessionName = "New Session",
-    this.sprints = 0,
-    this.completedTaskCount = 0,
-    this.totalTaskCount = 0,
-    this.efficiency = 0,
-    DateTime? date,
-    this.taskList = const [],
-  })  : sessionId = const Uuid().v1(),
-        date = date ?? DateTime.now() {
-    // Constructor body (optional additional logic can go here)
-  }
+  @HiveField(8)
+  late int totalTaskCount;
 
-  getid(){
-    return sessionId;
-  }
+  @HiveField(9)
+  late int completedTaskCount;
 
-  calculateefficency(){
-    efficiency = completedTaskCount/totalTaskCount;
-  }
+  // Constructor for initializing PomodoroSession
+  PomodoroSession({
+    required this.sessionId,
+    required this.taskIds,
+    required this.totalSprints,
+    required this.completedSprints,
+    required this.startTime,
+    required this.sessionDuration,
+    required this.isCompleted,
+    required this.efficiency,
+    required this.totalTaskCount,
+    required this.completedTaskCount,
+  });
 }

@@ -1,34 +1,25 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
-
-
-@HiveType(typeId: 2) // Unique typeId (e.g., 2, different from Session's 1)
-class Task extends HiveObject {
+part "TaskObject.g.dart";
+@HiveType(typeId: 1)
+class TodoTask extends HiveObject {
   @HiveField(0)
-  late String taskId; // Will be initialized in constructor
+  late String taskId;
 
   @HiveField(1)
-  String taskName; // Name of the task
+  late String title;
 
   @HiveField(2)
-  bool status; // Task completion status (true for done, false for pending)
+  late bool isDone;
 
-  // Constructor with UUID generation
-  Task({
-    this.taskName = '', // Default empty name
-    this.status = false, // Default to pending
-  }) {
-    taskId = const Uuid().v1(); // Generate UUID in constructor
-  }
+  @HiveField(3)
+  late String? sessionId; // Optional: link to session if used
 
-  getid(){
-    return taskId;
-  }
-
-  markasdone(){
-    status = true;
-  }
-  masrkasundone(){
-    status = false;
-  }
+  // Constructor for initializing TodoTask
+  TodoTask({
+    required this.taskId,
+    required this.title,
+    required this.isDone,
+    this.sessionId,
+  });
 }
