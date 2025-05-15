@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:promodoro/Bloc/bloc_activesession/active_session_bloc.dart';
+import 'package:promodoro/Bloc/bloc_task/task_bloc.dart';
 import 'package:promodoro/Hive/AppState.dart';
 import 'package:promodoro/Hive/SessionObject.dart';
 import 'package:promodoro/Hive/TaskObject.dart';
@@ -14,47 +15,24 @@ import '../Constants.dart' as co;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-   Hive.registerAdapter(PomodoroSessionAdapter());
-   Hive.registerAdapter(TodoTaskAdapter());
-   Hive.registerAdapter(AppStateAdapter());
-
+  Hive.registerAdapter(PomodoroSessionAdapter());
+  Hive.registerAdapter(TodoTaskAdapter());
+  Hive.registerAdapter(AppStateAdapter());
+  await Hive.openBox('mainAppStateBox');
   await Hive.openBox<PomodoroSession>('sessionsBox');
   await Hive.openBox<TodoTask>('tasksBox');
   await Hive.openBox<AppState>('appStateBox');
 
   //call the bloc funtion
-  runApp(const MainApp());
+  runApp(
+    BlocProvider(
+      create: (context) => TaskBloc(),
+      
+        child: const MainApp(),
+     
+    ),
+  );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -98,7 +76,9 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ActiveSessionBloc()..add(checkSessionStatus())),
+        BlocProvider(
+          create: (context) => ActiveSessionBloc()..add(checkSessionStatus()),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData.light(), // Light theme

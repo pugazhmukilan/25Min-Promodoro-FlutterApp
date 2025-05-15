@@ -15,11 +15,16 @@ class AppState extends HiveObject {
   @HiveField(3)
   late String? activeSessionId; // If active, load this session
 
+   @HiveField(4)
+   int TotalCompletedTask = 0;
+
   // Constructor for initializing AppState
   AppState({
     required this.totalEfficiency,
     required this.totalSessions,
     required this.isSessionActive,
     this.activeSessionId,
+    required this.TotalCompletedTask,
+    
   });
 }

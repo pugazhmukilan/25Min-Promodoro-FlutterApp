@@ -10,16 +10,15 @@ class TodoTask extends HiveObject {
   late String title;
 
   @HiveField(2)
-  late bool isDone;
+   bool isDone  = false;
 
-  @HiveField(3)
-  late String? sessionId; // Optional: link to session if used
+  
 
   // Constructor for initializing TodoTask
   TodoTask({
     required this.taskId,
     required this.title,
     required this.isDone,
-    this.sessionId,
+    
   });
 }

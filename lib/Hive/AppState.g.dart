@@ -21,13 +21,14 @@ class AppStateAdapter extends TypeAdapter<AppState> {
       totalSessions: fields[1] as int,
       isSessionActive: fields[2] as bool,
       activeSessionId: fields[3] as String?,
+      TotalCompletedTask: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, AppState obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.totalEfficiency)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class AppStateAdapter extends TypeAdapter<AppState> {
       ..writeByte(2)
       ..write(obj.isSessionActive)
       ..writeByte(3)
-      ..write(obj.activeSessionId);
+      ..write(obj.activeSessionId)
+      ..writeByte(4)
+      ..write(obj.TotalCompletedTask);
   }
 
   @override

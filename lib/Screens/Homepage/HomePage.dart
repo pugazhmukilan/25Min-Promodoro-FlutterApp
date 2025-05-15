@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:promodoro/Bloc/bloc_activesession/active_session_bloc.dart';
 import 'package:promodoro/ColorPallets.dart';
+import 'package:promodoro/Hive/AppState.dart';
+import 'package:promodoro/Screens/AddTask/AddTaskPage.dart';
 import 'package:promodoro/Screens/CreateSession/CreateSessionPage.dart';
 import 'package:promodoro/Screens/Homepage/ThemeIcon.dart';
 import "../../Constants.dart";
@@ -89,15 +92,32 @@ class _HomepageState extends State<Homepage> {
                                   .center, // Align text on baseline
 
                           children: [
-                            Text(
-                              "100",
-                              style: TextStyle(
-                                height: 1,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 80,
-                                color: AppColors.white1,
-                              ),
+                            ValueListenableBuilder(
+                              valueListenable: Hive.box<AppState>('appStateBox').listenable(),
+                              builder: (context, box, _) {
+                                final appState = box.get(0, 
+                                  defaultValue: AppState(
+                                    totalEfficiency: 0,
+                                    totalSessions: 0,
+                                    isSessionActive: false,
+                                    TotalCompletedTask: 0,
+                                  )
+                                );
+                                
+                                // Convert to integer percentage for display
+                                final efficiencyPercentage = ((appState?.totalEfficiency ?? 0) * 100).round();
+                                
+                                return Text(
+                                  "$efficiencyPercentage",
+                                  style: TextStyle(
+                                    height: 1,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 80,
+                                    color: AppColors.white1,
+                                  ),
+                                );
+                              },
                             ),
                             Text(
                               "%",
@@ -149,18 +169,32 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
 
-                      Text(
-                        "32",
-                        style: TextStyle(
-                          height: 1,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w700,
-                          color:
-                              isDarkTheme
-                                  ? AppColors.white1
-                                  : AppColors.blackDark,
-                          fontSize: 60,
-                        ),
+                      ValueListenableBuilder(
+                        valueListenable: Hive.box<AppState>('appStateBox').listenable(),
+                        builder: (context, box, _) {
+                          final appState = box.get(0, 
+                            defaultValue: AppState(
+                              totalEfficiency: 0,
+                              totalSessions: 0,
+                              isSessionActive: false,
+                              TotalCompletedTask: 0,
+                            )
+                          );
+                          
+                          return Text(
+                            "${appState?.totalSessions ?? 0}",
+                            style: TextStyle(
+                              height: 1,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w700,
+                              color:
+                                  isDarkTheme
+                                      ? AppColors.white1
+                                      : AppColors.blackDark,
+                              fontSize: 60,
+                            ),
+                          );
+                        },
                       ),
                       Text(
                         "Sessions",
@@ -206,7 +240,14 @@ class _HomepageState extends State<Homepage> {
 
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Addtaskpage(),
+                            ),
+                          );
+                        },
                         icon: Icon(Icons.add),
                         iconSize: 50,
                       ),
@@ -296,7 +337,7 @@ class _CurrentSessionWidgetState extends State<CurrentSessionWidget> {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return BlocBuilder<ActiveSessionBloc, ActiveSessionState>(
-      builder: (context, state) {
+      builder: (context, state){
         if(state is SessionActive){
           return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -352,7 +393,7 @@ class _CurrentSessionWidgetState extends State<CurrentSessionWidget> {
         );
         }
 
-        if(state is SessionInactive){
+        
           return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -406,59 +447,8 @@ class _CurrentSessionWidgetState extends State<CurrentSessionWidget> {
           ],
         );
         }
-        // return Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        //   children: [
-        //     Text(
-        //       "Current\nSession",
-        //       style: TextStyle(
-        //         fontFamily: "Montserrat",
-        //         fontWeight: FontWeight.bold,
-        //         color: Colors.white,
-        //         fontSize: 30,
-        //       ),
-        //     ),
-        //     Container(
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           Text(
-        //             "00:00",
-        //             style: TextStyle(
-        //               height: 1,
-        //               fontFamily: "Montserrat",
-        //               color: Colors.white,
-        //               fontSize: 30,
-        //               fontWeight: FontWeight.bold,
-        //             ),
-        //           ),
-        //           Text(
-        //             "Min Left",
-        //             style: TextStyle(
-        //               height: 1,
-        //               fontFamily: "Montserrat",
-        //               fontSize: 10,
-        //               color: Colors.white,
-        //               fontWeight: FontWeight.w700,
-        //             ),
-        //           ),
-        //           Text(
-        //             "sprint 1",
-        //             style: TextStyle(
-        //               height: 1,
-        //               fontFamily: "Montserrat",
-        //               fontWeight: FontWeight.bold,
-        //               color: AppColors.violetLight,
-        //               fontSize: 20,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ],
-        // );
-      },
+        
+      
     );
   }
 }

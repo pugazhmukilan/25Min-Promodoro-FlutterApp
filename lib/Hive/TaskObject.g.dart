@@ -20,22 +20,19 @@ class TodoTaskAdapter extends TypeAdapter<TodoTask> {
       taskId: fields[0] as String,
       title: fields[1] as String,
       isDone: fields[2] as bool,
-      sessionId: fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TodoTask obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.taskId)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.isDone)
-      ..writeByte(3)
-      ..write(obj.sessionId);
+      ..write(obj.isDone);
   }
 
   @override
